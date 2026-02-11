@@ -1,6 +1,6 @@
 from nemoguardrails import LLMRails, RailsConfig
 
-config = RailsConfig.from_path("./nemo_guardrails/config.yml")
+config = RailsConfig.from_path("./nemo/nemo_guardrails/config.yml")
 rails = LLMRails(config)
 
 response = rails.generate(messages=[
