@@ -1,0 +1,14 @@
+import flow
+import command
+import injection
+import encode
+import network
+
+define bot refuse_with_reason
+  $reason = $reason or "This request violates security policy."
+  bot response:
+    "I can’t help with that. Reason: {$reason}"
+
+define flow main
+  user said anything
+  run detect_malicious_intent

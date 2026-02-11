@@ -1,0 +1,64 @@
+define flow detect_cli_abuse
+  user said $cmd
+
+  if $cmd matches any of [
+    # Destructive
+    "rm -rf /",
+    "rm -rf *",
+    ":(){ :|:& };:",
+    "dd if=/dev/zero",
+    "mkfs",
+    "wipefs",
+
+    # Privilege escalation
+    "sudo su",
+    "sudo -i",
+    "chmod 777 /",
+    "setcap cap_sys_admin",
+    "pkexec",
+
+    # Persistence / backdoors
+    "crontab -e",
+    "@reboot",
+    "systemctl enable",
+    "rc.local",
+    "nohup .* &",
+
+    # Credential dumping
+    "/etc/shadow",
+    "mimikatz",
+    "lsass",
+    "procdump",
+
+    # Recon
+    "whoami",
+    "id",
+    "uname -a",
+    "ifconfig",
+    "ip a",
+    "netstat",
+    "ss -lntp",
+
+    # Log tampering
+    "history -c",
+    "unset HISTFILE",
+    "echo '' > .*log",
+
+    # Containers / host escape
+    "docker run --privileged",
+    "mount /dev",
+    "nsenter",
+
+    # Windows specific
+    "powershell -enc",
+    "Invoke-Expression",
+    "Set-MpPreference -DisableRealtimeMonitoring",
+    "reg add HKLM",
+
+    # Download & execute
+    "curl .* | sh",
+    "wget .* | bash",
+    "certutil -urlcache",
+    "bitsadmin"
+  ]
+    run refuse_with_reason(reason="Malicious or unsafe command execution detected.")

@@ -1,0 +1,11 @@
+define user intent ask_question:
+    "what is"
+    "how do"
+    "explain"
+
+define bot response safe_answer:
+    "Here’s a safe and helpful answer."
+
+define flow main:
+    user ask_question
+    bot safe_answer
